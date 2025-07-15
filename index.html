@@ -44,17 +44,19 @@
       <h2 class="text-xl font-bold mb-2">Highlights</h2>
       <div class="bg-purple-100 dark:bg-purple-800 p-4 rounded-xl">
         <h3 class="text-sm font-semibold">Top Performer</h3>
-        <p class="text-lg font-bold text-primary mt-1">Lotus (July)</p>
+        <p class="text-lg font-bold text-primary mt-1">Lotus(Own Website)(july)</p>
         <p class="text-xs">52 Visitors</p>
       </div>
       <div class="bg-pink-100 dark:bg-pink-800 p-4 rounded-xl">
         <h3 class="text-sm font-semibold">Biggest Drop</h3>
-        <p class="text-lg font-bold text-accent mt-1">Chandra</p>
+        <p class="text-lg font-bold text-accent mt-1">Chandra(HM Website)</p>
         <p class="text-xs">-224 drop</p>
+        <p class="text-lg font-bold text-accent mt-1">Kovai(HM Website)</p>
+        <p class="text-xs">-70 drop</p>
       </div>
       <div class="bg-yellow-100 dark:bg-yellow-800 p-4 rounded-xl">
         <h3 class="text-sm font-semibold">Most Consistent</h3>
-        <p class="text-lg font-bold mt-1">Kovai HL</p>
+        <p class="text-lg font-bold mt-1">Kovai(HL Website)</p>
         <p class="text-xs">Gradual growth</p>
       </div>
       <div class="mt-4">
@@ -87,26 +89,47 @@
       <!-- Tab Panels -->
       <div id="lotus" class="tab-content">
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6 mb-6 backdrop-blur-md bg-opacity-80">
+          <h2 class="text-xl font-semibold mb-4">Lotus - Hyper Local Website</h2>
+          <canvas id="lotusHLChart"></canvas>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6 mb-6 backdrop-blur-md bg-opacity-80">
+          <h2 class="text-xl font-semibold mb-4">Lotus - Hyundai Motors Website</h2>
+          <canvas id="lotusHMChart"></canvas>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6 mb-6 backdrop-blur-md bg-opacity-80">
           <h2 class="text-xl font-semibold mb-4">Lotus - Own Website</h2>
           <canvas id="lotusOwnChart"></canvas>
         </div>
-        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow text-center">
-          <h3 class="text-sm">July Visitors</h3>
-          <p id="lotusVisitors" class="text-3xl font-bold text-primary">0</p>
-        </div>
+        
       </div>
 
       <div id="chandra" class="tab-content hidden">
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6 mb-6">
-          <h2 class="text-xl font-semibold mb-4">Chandra - HM Website</h2>
+          <h2 class="text-xl font-semibold mb-4">Chandra - Hyper Local Website</h2>
+          <canvas id="chandraHLChart"></canvas>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6 mb-6">
+          <h2 class="text-xl font-semibold mb-4">Chandra - Hyundai Motors Website</h2>
           <canvas id="chandraHMChart"></canvas>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6 mb-6">
+          <h2 class="text-xl font-semibold mb-4">Chandra - Own Website</h2>
+          <h1>404 - Website not Found</h1>
         </div>
       </div>
 
       <div id="kovai" class="tab-content hidden">
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6 mb-6">
-          <h2 class="text-xl font-semibold mb-4">Kovai - HM Website</h2>
+          <h2 class="text-xl font-semibold mb-4">Kovai - Hyper Local Website</h2>
+          <canvas id="kovaiHLChart"></canvas>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6 mb-6">
+          <h2 class="text-xl font-semibold mb-4">Kovai - Hyundai Motors Website</h2>
           <canvas id="kovaiHMChart"></canvas>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6 mb-6">
+          <h2 class="text-xl font-semibold mb-4">Kovai - Own Website</h2>
+          <h1>404 - Website not Found</h1>
         </div>
       </div>
     </main>
@@ -120,7 +143,7 @@
           <span class="text-red-500">Critical</span>
         </li>
         <li class="flex justify-between items-center">
-          <span><bold style="font-weight: 400;">Lotus Hyundai</bold>'s HM and HL site<br><bold style="font-weight: 400;">0</bold> Organic Traffic</span>
+          <span>Lotus Hyundai's HM and HL site<br>0 Organic Traffic</span>
           <span class="text-red-500">Critical</span>
         </li>
         <li class="flex justify-between items-center">
@@ -175,6 +198,52 @@
 
     updateGreeting();
 
+    new Chart(document.getElementById('lotusHLChart'), {
+      type: 'line',
+      data: {
+        labels: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        datasets: [{
+          label: 'Lotus Visitors',
+          data: [0, 0, 0, 0, 0, 0],
+          borderColor: '#7C3AED',
+          backgroundColor: '#7C3AED33',
+          tension: 0.4,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true },
+          x: {}
+        }
+      }
+    });
+
+    new Chart(document.getElementById('lotusHMChart'), {
+      type: 'line',
+      data: {
+        labels: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        datasets: [{
+          label: 'Lotus Visitors',
+          data: [0, 0, 0, 0, 0, 0],
+          borderColor: '#7C3AED',
+          backgroundColor: '#7C3AED33',
+          tension: 0.4,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true },
+          x: {}
+        }
+      }
+    });
+
     new Chart(document.getElementById('lotusOwnChart'), {
       type: 'line',
       data: {
@@ -184,6 +253,29 @@
           data: [0, 2, 3, 3, 3, 52],
           borderColor: '#7C3AED',
           backgroundColor: '#7C3AED33',
+          tension: 0.4,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true },
+          x: {}
+        }
+      }
+    });
+
+    new Chart(document.getElementById('chandraHLChart'), {
+      type: 'line',
+      data: {
+        labels: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        datasets: [{
+          label: 'Chandra Visitors',
+          data: [0, 0, 0, 0, 0, 0],
+          borderColor: '#EF4444',
+          backgroundColor: '#EF444433',
           tension: 0.4,
           fill: true
         }]
@@ -210,6 +302,37 @@
           tension: 0.4,
           fill: true
         }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true },
+          x: {}
+        }
+      }
+    });
+
+    new Chart(document.getElementById('kovaiHLChart'), {
+      type: 'line',
+      data: {
+        labels: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        datasets: [{
+          label: 'Kovai Visitors',
+          data: [1, 2, 3, 4, 5, 5],
+          borderColor: '#3B82F6',
+          backgroundColor: '#3B82F633',
+          tension: 0.4,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true },
+          x: {}
+        }
       }
     });
 
@@ -225,6 +348,14 @@
           tension: 0.4,
           fill: true
         }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true },
+          x: {}
+        }
       }
     });
 
