@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hyundai Insights Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#7C3AED',
+            accent: '#EC4899',
+            soft: '#F3F4F6'
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif']
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f5f7fb] dark:bg-gray-900 font-sans text-gray-800 dark:text-gray-200">
+  <!-- Header -->
+  <header class="w-full bg-white dark:bg-gray-800 px-6 py-4 shadow flex justify-between items-center">
+    <div>
+      <h2 id="greeting" class="text-lg font-medium text-gray-600 dark:text-gray-400">Good Day</h2>
+      <h1 class="text-2xl font-bold">Lotus Hyundai</h1>
+    </div>
+    <div class="flex items-center gap-4">
+      <input type="text" placeholder="Search..." class="pl-10 pr-4 py-2 rounded-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm" />
+      <button onclick="toggleDarkMode()" class="text-sm px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded-full">🌗 Toggle Dark</button>
+    </div>
+  </header>
+
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white dark:bg-gray-800 shadow-lg flex flex-col p-4 space-y-6">
+      <h2 class="text-xl font-bold mb-2">Highlights</h2>
+      <div class="bg-purple-100 dark:bg-purple-800 p-4 rounded-xl">
+        <h3 class="text-sm font-semibold">Top Performer</h3>
+        <p class="text-lg font-bold text-primary mt-1">Lotus (July)</p>
+        <p class="text-xs">52 Visitors</p>
+      </div>
+      <div class="bg-pink-100 dark:bg-pink-800 p-4 rounded-xl">
+        <h3 class="text-sm font-semibold">Biggest Drop</h3>
+        <p class="text-lg font-bold text-accent mt-1">Chandra</p>
+        <p class="text-xs">-224 drop</p>
+      </div>
+      <div class="bg-yellow-100 dark:bg-yellow-800 p-4 rounded-xl">
+        <h3 class="text-sm font-semibold">Most Consistent</h3>
+        <p class="text-lg font-bold mt-1">Kovai HL</p>
+        <p class="text-xs">Gradual growth</p>
+      </div>
+      <div class="mt-4">
+        <h4 class="text-sm font-medium mb-1">Chandra HM <span class="text-xs text-gray-500">Next: 300</span></h4>
+        <div class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full mb-3">
+          <div class="h-2 bg-primary rounded-full" style="width: 70%"></div>
+        </div>
+        <h4 class="text-sm font-medium mb-1">Kovai HM <span class="text-xs text-gray-500">Next: 100</span></h4>
+        <div class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full mb-3">
+          <div class="h-2 bg-accent rounded-full" style="width: 75%"></div>
+        </div>
+        <h4 class="text-sm font-medium mb-1">Lotus Own <span class="text-xs text-gray-500">Next: 60</span></h4>
+        <div class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full">
+          <div class="h-2 bg-green-500 rounded-full" style="width: 87%"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6">
+      <!-- Tabs -->
+      <div class="mb-4">
+        <ul class="flex space-x-4">
+          <li><button class="tab-btn px-6 py-2 rounded-full bg-primary text-white shadow transition hover:bg-purple-700" data-target="lotus">Lotus</button></li>
+          <li><button class="tab-btn px-6 py-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white shadow transition hover:bg-gray-300" data-target="chandra">Chandra</button></li>
+          <li><button class="tab-btn px-6 py-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white shadow transition hover:bg-gray-300" data-target="kovai">Kovai</button></li>
+        </ul>
+      </div>
+
+      <!-- Tab Panels -->
+      <div id="lotus" class="tab-content">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6 mb-6 backdrop-blur-md bg-opacity-80">
+          <h2 class="text-xl font-semibold mb-4">Lotus - Own Website</h2>
+          <canvas id="lotusOwnChart"></canvas>
+        </div>
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow text-center">
+          <h3 class="text-sm">July Visitors</h3>
+          <p id="lotusVisitors" class="text-3xl font-bold text-primary">0</p>
+        </div>
+      </div>
+
+      <div id="chandra" class="tab-content hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6 mb-6">
+          <h2 class="text-xl font-semibold mb-4">Chandra - HM Website</h2>
+          <canvas id="chandraHMChart"></canvas>
+        </div>
+      </div>
+
+      <div id="kovai" class="tab-content hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6 mb-6">
+          <h2 class="text-xl font-semibold mb-4">Kovai - HM Website</h2>
+          <canvas id="kovaiHMChart"></canvas>
+        </div>
+      </div>
+    </main>
+
+    <!-- Activity Panel -->
+    <aside class="w-80 bg-white dark:bg-gray-800 border-l shadow p-4">
+      <h3 class="text-lg font-semibold mb-4">Traffic Alerts</h3>
+      <ul class="space-y-4 text-sm">
+        <li class="flex justify-between items-center">
+          <span>Own site not found <br>(Chandra and Kovai Hyundai)</span>
+          <span class="text-red-500">Critical</span>
+        </li>
+        <li class="flex justify-between items-center">
+          <span><bold style="font-weight: 400;">Lotus Hyundai</bold>'s HM and HL site<br><bold style="font-weight: 400;">0</bold> Organic Traffic</span>
+          <span class="text-red-500">Critical</span>
+        </li>
+        <li class="flex justify-between items-center">
+          <span>Kovai Hyundai HM Website peaked in May</span>
+          <span class="text-green-500">+78</span>
+        </li>
+        <li class="flex justify-between items-center">
+          <span>Lotus Hyundai's Own Website July Surge</span>
+          <span class="text-green-500">+52</span>
+        </li>
+      </ul>
+    </aside>
+  </div>
+
+  <!-- Footer -->
+  <footer class="w-full bg-white dark:bg-gray-800 text-center text-sm py-3 shadow-inner">
+    © 2025 Hyundai Traffic Dashboard · Made with ❤️ by Dharun
+  </footer>
+
+  <script>
+    function toggleDarkMode() {
+      document.documentElement.classList.toggle('dark');
+    }
+
+    function animateCounter(id, end) {
+      let el = document.getElementById(id);
+      let i = 0;
+      let interval = setInterval(() => {
+        el.innerText = i;
+        i++;
+        if (i > end) clearInterval(interval);
+      }, 30);
+    }
+
+    function showTab(targetId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.getElementById(targetId).classList.remove('hidden');
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => showTab(btn.dataset.target));
+    });
+
+    function updateGreeting() {
+      const hour = new Date().getHours();
+      let greeting;
+      if (hour < 12) greeting = '🌞 Good Morning';
+      else if (hour < 18) greeting = '☀️ Good Afternoon';
+      else greeting = '🌙 Good Evening';
+      document.getElementById('greeting').innerText = greeting;
+    }
+
+    updateGreeting();
+
+    new Chart(document.getElementById('lotusOwnChart'), {
+      type: 'line',
+      data: {
+        labels: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        datasets: [{
+          label: 'Lotus Visitors',
+          data: [0, 2, 3, 3, 3, 52],
+          borderColor: '#7C3AED',
+          backgroundColor: '#7C3AED33',
+          tension: 0.4,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true },
+          x: {}
+        }
+      }
+    });
+
+    new Chart(document.getElementById('chandraHMChart'), {
+      type: 'line',
+      data: {
+        labels: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        datasets: [{
+          label: 'Chandra Visitors',
+          data: [245, 235, 189, 97, 25, 21],
+          borderColor: '#EF4444',
+          backgroundColor: '#EF444433',
+          tension: 0.4,
+          fill: true
+        }]
+      }
+    });
+
+    new Chart(document.getElementById('kovaiHMChart'), {
+      type: 'line',
+      data: {
+        labels: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        datasets: [{
+          label: 'Kovai Visitors',
+          data: [32, 37, 52, 78, 13, 9],
+          borderColor: '#3B82F6',
+          backgroundColor: '#3B82F633',
+          tension: 0.4,
+          fill: true
+        }]
+      }
+    });
+
+    animateCounter('lotusVisitors', 52);
+    showTab('lotus');
+  </script>
+</body>
+</html>
